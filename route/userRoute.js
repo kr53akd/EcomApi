@@ -1,33 +1,10 @@
 const express = require("express");
+const { List, Create, Update, Delete } = require("../controller/userController/userController");
 const uesrRoute = express.Router();
 
-uesrRoute.get("/list", (req, res)=>{
-    return res.status(200).json({
-        message:"any message",
-        data:"any data",
-        status: 200
-    })
-})
-uesrRoute.post("/create", (req, res)=>{
-    return res.status(200).json({
-        message:"any message",
-        data:"any data",
-        status: 200
-    })
-})
-uesrRoute.patch("/update", (req, res)=>{
-    return res.status(200).json({
-        message:"any message",
-        data:"any data",
-        status: 200
-    })
-})
-uesrRoute.delete("/delete", (req, res)=>{
-    return res.status(200).json({
-        message:"any message",
-        data:"any data",
-        status: 200
-    })
-})
+uesrRoute.get("/list", List)
+uesrRoute.post("/create", Create)
+uesrRoute.patch("/update", Update)
+uesrRoute.delete("/delete", Delete)
 
 module.exports = uesrRoute;
