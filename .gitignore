@@ -3,3 +3,4 @@
 
 # ignored the node_modules
 /node_modules
+/generated/prisma

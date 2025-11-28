@@ -1,6 +1,8 @@
 
+const {prisma}  = require("../../utils/prismaClient.ts");
 const { createSchema } = require("./userValidation");
-const List = (req, res)=>{
+const List = async (req, res)=>{
+    const AllUserList = await prisma.user
     return res.status(200).json({
         message:"any message",
         data:"any data",
@@ -8,12 +10,18 @@ const List = (req, res)=>{
     })
 };
 
-const Create = (req, res)=>{
+const Create = async(req, res)=>{
     try{
     const { body } = req;
+    console.log(body, 14)
     const validateRequset = createSchema.validate(body);
+    console.log(validateRequset?.error?.details, 15)
     if(validateRequset.error){
-        return validateRequset
+        return res.status(400).json({
+            message:"Bad Requrest",
+            error: {message : validateRequset.error.details[0].message},
+            status: 401
+        })
     }
     const { email } = body;
     if(!email){
