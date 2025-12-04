@@ -1,13 +1,26 @@
-
-const {prisma}  = require("../../utils/prismaClient.ts");
 const { createSchema } = require("./userValidation");
+const {connection} = require("../../db.conn");
+
 const List = async (req, res)=>{
-    const AllUserList = await prisma.user
-    return res.status(200).json({
+    
+    (await connection).query({
+        sql:"SELECT * FROM user",
+        rowsAsArray: false
+    }).then(data => {
+        return res.status(200).json({
         message:"any message",
-        data:"any data",
+        data:data[0],
         status: 200
     })
+    })
+    .catch(err=> {
+        return res.status(500).json({
+        message:"Something went wrong!",
+        error: err,
+        status: 500
+    })
+    });
+    
 };
 
 const Create = async(req, res)=>{
@@ -63,4 +76,5 @@ const Delete = (req, res)=>{
         status: 200
     })
 }
+
 module.exports = {List, Create, Update, Delete}
