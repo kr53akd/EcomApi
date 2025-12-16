@@ -1,5 +1,26 @@
-const { createSchema } = require("./userValidation");
+const { createSchema, loginSchema } = require("./userValidation");
 const {connection} = require("../../db.conn");
+const { generateToken } = require("../../utils/jwt");
+
+const Login = async(req, res)=>{
+    const {body} =  req;
+    const validateRequest = loginSchema.validate(body);
+    
+    const tokenRes = await generateToken(body);
+    if(validateRequest.error){
+         return res.status(400).json({
+            message:"Bad Requrest",
+            error: {message : validateRequest.error.details[0].message},
+            status: 401
+        })
+    }
+  
+    return res.status(200).json({
+        message:"Logged in Successfully",
+        data: {token: tokenRes},
+        status:200
+    })
+}
 
 const List = async (req, res)=>{
     
@@ -27,12 +48,12 @@ const Create = async(req, res)=>{
     try{
     const { body } = req;
     console.log(body, 14)
-    const validateRequset = createSchema.validate(body);
-    console.log(validateRequset?.error?.details, 15)
-    if(validateRequset.error){
+    const validateRequest = createSchema.validate(body);
+    console.log(validateRequest?.error?.details, 15)
+    if(validateRequest.error){
         return res.status(400).json({
             message:"Bad Requrest",
-            error: {message : validateRequset.error.details[0].message},
+            error: {message : validateRequest.error.details[0].message},
             status: 401
         })
     }
@@ -77,4 +98,4 @@ const Delete = (req, res)=>{
     })
 }
 
-module.exports = {List, Create, Update, Delete}
+module.exports = {List, Create, Update, Delete, Login}
